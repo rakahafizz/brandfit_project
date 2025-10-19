@@ -1,0 +1,10 @@
+# Environment
+.env
+
+
+# Python / Django umum
+*.pyc
+__pycache__/
+db.sqlite3
+/staticfiles/
+media/

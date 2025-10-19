@@ -1,0 +1,282 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ product.name }} - Brandfit.ID</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'orders/style.css' %}">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      color: #1f2937;
+      background: #ffffff;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 16px 0;
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px;
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: #111827;
+    }
+
+    nav a {
+      margin-left: 24px;
+      text-decoration: none;
+      color: #111827;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      color: #2563eb;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* PRODUCT CONTAINER */
+    .product-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      border-radius: 8px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+      padding: 48px 24px 24px 24px; /* top padding lebih besar */
+      background: #f9fafb;
+      align-items: flex-start;
+      margin-top: 60px; /* turunkan keseluruhan konten */
+    }
+
+    .product-image {
+      flex: 0 0 250px;
+      height: 250px;
+      border-radius: 8px;
+      object-fit: cover;
+      margin-top: 32px; /* gambar lebih kebawah */
+    }
+
+    .product-no-image {
+      width: 250px;
+      height: 250px;
+      background: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #475569;
+      font-weight: 500;
+      border-radius: 8px;
+      margin-top: 32px;
+    }
+
+    .product-details {
+      flex: 1 1 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .product-details h2 {
+      font-size: 2rem;
+      margin-bottom: 12px;
+      color: #111827;
+      margin-top: 32px; /* font lebih ke bawah */
+    }
+
+    .product-details p {
+      margin-bottom: 10px;
+      line-height: 1.6;
+      color: #374151;
+    }
+
+    .product-note {
+      font-size: 0.95rem;
+      color: #6b7280;
+      margin-top: 8px;
+      background: #f3f4f6;
+      padding: 8px 12px;
+      border-radius: 6px;
+    }
+
+    .order-form {
+      margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .order-form label {
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .order-form input, .order-form textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 6px;
+      border: 1px solid #d1d5db;
+      font-size: 1rem;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .order-form textarea {
+      resize: vertical;
+    }
+
+    .order-form button, .btn-wa {
+      display: inline-block;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: 0.2s;
+    }
+
+    .order-form button {
+      background-color: #2563eb;
+      color: #ffffff;
+    }
+
+    .order-form button:hover {
+      opacity: 0.9;
+    }
+
+    .btn-wa {
+      background-color: #25D366;
+      color: #ffffff;
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    footer {
+      text-align: center;
+      padding: 24px 16px;
+      border-top: 1px solid #e5e7eb;
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    @media (max-width: 768px) {
+      .product-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      .product-details {
+        flex: 1 1 100%;
+      }
+      .product-image, .product-no-image {
+        width: 100%;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <div class="header-container">
+      <h1 class="logo">Brandfit.ID</h1>
+      <nav>
+        <a href="{% url 'orders:index' %}#home">Home</a>
+        <a href="{% url 'orders:index' %}#produk">Produk</a>
+        <a href="{% url 'orders:index' %}#about">About</a>
+        <a href="{% url 'orders:index' %}#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MESSAGES -->
+  {% if messages %}
+    <div class="messages" style="max-width:1000px; margin:16px auto;">
+      {% for msg in messages %}
+        <div class="alert {% if msg.tags == 'success' %} alert-success
+                          {% elif msg.tags == 'error' %} alert-error
+                          {% else %} alert-info
+                          {% endif %}">
+          {{ msg }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- MAIN CONTENT -->
+  <main>
+    <div class="product-container">
+      {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+      {% else %}
+        <div class="product-no-image">No Image</div>
+      {% endif %}
+
+      <div class="product-details">
+        <div>
+          <h2>{{ product.name }}</h2>
+          <p>{{ product.short_description|default:product.short_description }}</p>
+          {% if product.price %}
+            <p><strong>Harga: Rp {{ product.price|floatformat:0 }}</strong></p>
+          {% endif %}
+          {% if product.note %}
+            <p class="product-note">Catatan Produk: {{ product.note }}</p>
+          {% endif %}
+        </div>
+
+        <div class="order-form">
+          <h3>Order Produk Ini</h3>
+          <form method="post">
+            {% csrf_token %}
+            <label for="id_name">Nama Pemesan</label>
+            {{ form.name }}
+
+            <label for="id_email">Email</label>
+            {{ form.email }}
+
+            <label for="id_phone">No. HP</label>
+            {{ form.phone }}
+
+            <label for="id_message">Kirim Pesanan Mu</label>
+            {{ form.message }}
+
+            <button type="submit">Kirim Pesanan</button>
+          </form>
+
+          {% for msg in messages %}
+            {% if msg.tags == 'success' %}
+              <p style="margin-top:12px;">Diskusi pembayaran via WhatsApp:</p>
+              <a href="https://wa.me/628389045852?text=Halo,%20saya%20ingin%20memesan%20{{ product.name }}" 
+                 target="_blank" 
+                 class="btn-wa">Chat WA</a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 Brandfit.ID - Semua hak dilindungi
+  </footer>
+</body>
+</html>

@@ -1,0 +1,9 @@
+<h2>Order {{ product.name }}</h2>
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="name" placeholder="Nama Anda" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="text" name="phone" placeholder="No HP" required>
+    <textarea name="notes" placeholder="Catatan (opsional)"></textarea>
+    <button type="submit">Order Sekarang</button>
+</form>

@@ -1,0 +1,135 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Brandfit.ID - UMKM Branding Cepat</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="{% static 'orders/style.css' %}?v=9">
+
+</head>
+<body>
+  <header>
+    <div class="container header-container">
+      <h1 class="logo">Brandfit.ID</h1>
+      <nav>
+        <a href="#home">Home</a>
+        <a href="#produk">Produk</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  {% if messages %}
+    <div class="messages container" style="padding-top:90px;">
+      {% for msg in messages %}
+        <div class="alert
+            {% if msg.tags == 'success' %} alert-success
+            {% elif msg.tags == 'error' %} alert-error
+            {% else %} alert-info
+            {% endif %}">
+          {{ msg }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <main>
+    <!-- HERO -->
+    <section id="home" class="hero" style="padding-top:20px;">
+      <div class="hero-overlay">
+        <div class="container hero-content">
+          <h2>Solusi Branding Cepat untuk UMKM</h2>
+          <p>Buat brand Anda lebih profesional dan menonjol di pasaran.</p>
+          <a href="#produk" class="btn">Lihat Produk</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRODUK -->
+    <section id="produk" class="section">
+      <div class="container">
+        <h2>Produk Unggulan</h2>
+        <div class="cards">
+
+          {% comment %} Produk unggulan dinamis dari database {% endcomment %}
+          {% if featured_products %}
+            {% for product in featured_products %}
+              <a href="{% url 'orders:product_detail' product.slug %}" style="text-decoration:none; color:inherit;">
+                <div class="card" role="button">
+                  {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width:100%; height:160px; object-fit:cover; border-radius:8px 8px 0 0;">
+                  {% else %}
+                    <div style="width:100%; height:160px; background:#f1f5f9; display:flex; align-items:center; justify-content:center; border-radius:8px 8px 0 0; color:#475569;">
+                      No Image
+                    </div>
+                  {% endif %}
+                  <div style="padding:12px;">
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.formatted_price }}</p>
+                    {% if product.price %}<p><strong>Rp {{ product.price|floatformat:0 }}</strong></p>{% endif %}
+                  </div>
+                </div>
+              </a>
+            {% endfor %}
+          {% else %}
+            <p>Belum ada produk unggulan.</p>
+          {% endif %}
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="section about-section">
+      <div class="container">
+        <h2>Tentang Brandfit</h2>
+        <div class="about-cards">
+          <div class="about-card">💡 Kami memberikan solusi kreatif cepat</div>
+          <div class="about-card">🚀 Branding yang siap pakai & profesional</div>
+          <div class="about-card">💼 Cocok untuk UMKM dari berbagai bidang</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section contact-section">
+      <div class="container">
+        <h2>Hubungi Kami</h2>
+        <p style="text-align:center; margin-top:8px;">Email: radoraka79@gmail.com | Telp: 083890458528</p>
+
+        {% if messages %}
+  <div class="messages">
+    {% for msg in messages %}
+      <div class="alert {{ msg.tags }}">{{ msg }}</div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+
+        <form class="contact-form" method="post" action="{% url 'orders:contact_submit' %}" style="max-width:700px; margin:20px auto 0;">
+          {% csrf_token %}
+          <input type="text" name="name" placeholder="Nama Anda" required>
+          <input type="email" name="email" placeholder="Email" required>
+          <textarea name="message" placeholder="Pesan Anda" required></textarea>
+          <button type="submit" class="btn">Kirim Pesan</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      &copy; 2025 Brandfit.ID - Semua hak dilindungi
+    </div>
+  </footer>
+
+  <script src="{% static 'orders/main.js' %}"></script>
+</body>
+</html>
