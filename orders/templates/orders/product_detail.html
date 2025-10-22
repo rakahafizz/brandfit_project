@@ -215,9 +215,7 @@
         <div class="alert {% if msg.tags == 'success' %} alert-success
                           {% elif msg.tags == 'error' %} alert-error
                           {% else %} alert-info
-                          {% endif %}">
-          {{ msg }}
-        </div>
+                          {% endif %}">{{ msg }}</div>
       {% endfor %}
     </div>
   {% endif %}
@@ -236,7 +234,7 @@
           <h2>{{ product.name }}</h2>
           <p>{{ product.short_description|default:product.short_description }}</p>
           {% if product.price %}
-            <p><strong>Harga: Rp {{ product.price|floatformat:0 }}</strong></p>
+            <p><strong>Harga: Rp {{ product.price|intcomma}}</strong></p>
           {% endif %}
           {% if product.note %}
             <p class="product-note">Catatan Produk: {{ product.note }}</p>

@@ -1,4 +1,5 @@
 {% load static %}
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -73,7 +74,9 @@
                   <div style="padding:12px;">
                     <h3>{{ product.name }}</h3>
                     <p>{{ product.formatted_price }}</p>
-                    {% if product.price %}<p><strong>Rp {{ product.price|floatformat:0 }}</strong></p>{% endif %}
+                    {% if product.price %}
+                      <p><strong>Rp {{ product.price|intcomma}}</strong></p>
+                    {% endif %}
                   </div>
                 </div>
               </a>

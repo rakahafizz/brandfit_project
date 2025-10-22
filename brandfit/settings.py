@@ -1,8 +1,10 @@
 
 from pathlib import Path
+import os
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 SECRET_KEY = 'django-insecure-h7*5oqtw!!+11n4r1_08#z)-25e)a6439r7t0z-+4go5e_j*96'
 DEBUG = True
@@ -73,7 +75,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # ini untuk collectstatic (production)
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 from django.contrib.messages import constants as messages
 MESSAGE_TAGS = {
