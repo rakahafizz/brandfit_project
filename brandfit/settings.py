@@ -1,14 +1,20 @@
-
 from pathlib import Path
 import os
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+ANALYTICS_ID = "G-TEST123456"
+
+ANALYTICS_ID = os.environ.get('ANALYTICS_ID', '')
+# Di settings.py, tambahkan sementara:
+
+
 
 
 SECRET_KEY = 'django-insecure-h7*5oqtw!!+11n4r1_08#z)-25e)a6439r7t0z-+4go5e_j*96'
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',

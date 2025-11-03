@@ -1,0 +1,25 @@
+{% if analytics_id %}
+<script>
+console.log("✅ ANALYTICS: Template loaded successfully!");
+console.log("📊 ANALYTICS: ID =", "{{ analytics_id }}");
+</script>
+
+<!-- Google Analytics (ga4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ analytics_id }}"></script>
+<script>
+  console.log("🚀 ANALYTICS: Initializing Google Analytics...");
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '{{ analytics_id }}', { 
+    'anonymize_ip': true,
+    'debug_mode': true
+  });
+  console.log("✅ ANALYTICS: Google Analytics initialized!");
+</script>
+{% else %}
+<script>
+console.log("❌ ANALYTICS: No analytics_id provided");
+console.log("💡 TIP: Set ANALYTICS_ID in settings.py");
+</script>
+{% endif %}

@@ -1,6 +1,6 @@
 /* main.js
    Smooth scroll, reveal on scroll, subtle card tilt, WA button helper.
-   Meant to work with your CSS as-is; tidak mengubah tampilan.
+   Keamanan kecil ditambahkan: semua initialisasi dijalankan saat DOM siap.
 */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const target = document.querySelector(href);
       if (!target) return;
       e.preventDefault();
-      // compute offset to account for fixed header (approx 80px)
+      // offset untuk fixed header (sesuaikan kalau perlu)
       const headerOffset = 88;
       const elementPosition = target.getBoundingClientRect().top + window.pageYOffset;
       const offsetPosition = elementPosition - headerOffset;
@@ -20,16 +20,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 2) Reveal on scroll (IntersectionObserver) - elements: .card, .about-card, .hero-content, .product-container
+  // 2) Reveal on scroll (IntersectionObserver)
   const revealSelector = ['.card', '.about-card', '.hero-content', '.product-container', '.product-details', '.product-image'];
   const revealEls = Array.from(document.querySelectorAll(revealSelector.join(',')));
-  if (revealEls.length) {
+  if (revealEls.length && 'IntersectionObserver' in window) {
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('fade-in');
           entry.target.classList.remove('opacity-zero');
-          // optional: unobserve for performance
           io.unobserve(entry.target);
         }
       });
@@ -41,6 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
         io.observe(el);
       }
     });
+  } else {
+    // fallback: show everything if IntersectionObserver tidak tersedia
+    revealEls.forEach(el => el.classList.add('fade-in'));
   }
 
   // 3) Subtle 3D tilt effect on product cards (non-intrusive)
@@ -67,26 +69,20 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('mouseleave', () => btn.style.transform = '');
   });
 
-  // 5) Make any "Order" links to product detail open in same page anchor if slug/PK missing.
-  //    (Graceful fallback: if product links are wrong, this prevents blank behaviour)
-  document.querySelectorAll('a[href*="product/"]').forEach(a => {
-    // if href endswith slash with non-numeric segment, do nothing here;
-    // This is only a safety: if link is '#', ignore.
+  // 5) Safety: prevent links with href="#" from doing anything
+  document.querySelectorAll('a').forEach(a => {
     if (a.getAttribute('href') === '#') {
       a.addEventListener('click', (e) => e.preventDefault());
     }
   });
 
-  // 6) Optional: auto-add "Chat WA" button when order success message present
-  //    (It looks for an element that has alert-success text and appends WA button near it)
+  // 6) Auto-add "Chat WA" button when order success message present
   const messages = document.querySelectorAll('.alert-success, .messages .alert-success');
   if (messages.length) {
     messages.forEach(msg => {
-      // avoid duplicating WA button
       if (!msg.querySelector('.wa-inline-btn')) {
         const wa = document.createElement('a');
-        // change number/text as needed
-        const phone = '628389045852';
+        const phone = '628389045852'; // <-- GANTI NOMOR DI SINI jika perlu (tanpa +)
         const productName = encodeURIComponent(document.title || 'pesanan');
         wa.href = `https://wa.me/${phone}?text=Halo,%20saya%20ingin%20melakukan%20pembayaran%20untuk%20${productName}`;
         wa.className = 'btn btn-wa wa-inline-btn';
@@ -103,4 +99,40 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Tab') document.body.classList.add('user-is-tabbing');
   });
+
+  /* --- NAV TOGGLE (mobile) --- */
+  const navToggleBtn = document.getElementById('nav-toggle');
+  const mainNav = document.getElementById('main-nav');
+  if (navToggleBtn && mainNav) {
+    navToggleBtn.addEventListener('click', () => {
+      const open = mainNav.classList.toggle('open');
+      navToggleBtn.classList.toggle('open', open);
+      navToggleBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+
+    // close nav when clicking a link (mobile)
+    mainNav.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        mainNav.classList.remove('open');
+        navToggleBtn.classList.remove('open');
+        navToggleBtn.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+
+  // 8) Disable submit button after click to prevent double submits
+document.querySelectorAll('form').forEach(form => {
+  form.addEventListener('submit', (e) => {
+    if (!form.checkValidity()) {
+      // show native HTML5 messages
+      return;
+    }
+    const btn = form.querySelector('button[type="submit"]');
+    if (btn) {
+      btn.disabled = true;
+      btn.dataset.origText = btn.textContent;
+      btn.textContent = 'Mengirim...';
+    }
+  });
 });
+})

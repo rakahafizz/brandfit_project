@@ -1,0 +1,11 @@
+services:
+  web:
+    build: .
+    volumes:
+      - .:/app  # ✅ Ini untuk auto-reload changes
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=1
+      - DJANGO_SETTINGS_MODULE=brandfit.settings
+    command: python manage.py runserver 0.0.0.0:8000  # ✅ Pakai dev server untuk auto-reload

@@ -1,3 +1,10 @@
+/* =========================
+   style.css (final revision)
+   - Keep visual layout as before
+   - Increase logo size without scaling text
+   - Add responsive hamburger styles (no visual change on desktop)
+   ========================= */
+
 /* RESET & BASE STYLE */
 * {
   margin: 0;
@@ -17,7 +24,9 @@ body {
   margin: auto;
 }
 
-/* HEADER */
+/* =========================
+   HEADER (brand logo + text + nav)
+   ========================= */
 header {
   position: fixed;
   top: 0;
@@ -27,30 +36,93 @@ header {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   z-index: 999;
 }
-header .container {
+
+/* internal header container (kept for compatibility) */
+.header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 15px 0;
-}
-header .logo {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #1e258a;
-}
-header nav a {
-  margin-left: 25px;
-  text-decoration: none;
-  font-weight: 500;
-  color: #1e408a;
-  transition: 0.3s;
-}
-header nav a:hover {
-  color: #ff1e00;
-  transform: scale(1.05);
+  gap: 12px;
 }
 
-/* HERO SECTION */
+/* brand block: logo image + text */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0px;
+}
+
+/* LOGO IMAGE */
+/* Ubah width di sini kalau mau logo lebih besar/sedikit lebih kecil.
+   Text .logo tidak akan mengikuti ukuran ini. */
+.brand-logo {
+  width: 50px;         /* ukuran logo; ubah jika perlu (mis. 64px) */
+  height: 48px;
+  object-fit: contain;
+  display: block;
+  border-radius: 10px;  /* opsional */
+}
+
+/* BRAND TEXT (tidak ikut membesar saat logo diperbesar) */
+.logo {
+  font-size: 1.6rem;   /* tetap ukuran teks yang diinginkan */
+  font-weight: 700;
+  color: #3b009b;
+  line-height: 1;
+}
+
+/* nav (desktop) */
+.main-nav, nav {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+/* nav links */
+.main-nav a, nav a {
+  text-decoration: none;
+  color: #1e408a;
+  font-weight: 500;
+  transition: 0.22s ease;
+  padding: 6px 2px;
+}
+.main-nav a:hover, nav a:hover {
+  color: #ff1e00;
+  transform: translateY(-1px);
+}
+
+/* hamburger button (hidden on desktop) */
+.nav-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+}
+.hamburger {
+  display: block;
+  width: 26px;
+  height: 2px;
+  background: #1e258a;
+  position: relative;
+}
+.hamburger::before,
+.hamburger::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 26px;
+  height: 2px;
+  background: #1e258a;
+  transition: transform .18s ease, opacity .18s ease;
+}
+.hamburger::before { top: -8px; }
+.hamburger::after  { top: 8px; }
+
+/* =========================
+   HERO SECTION (no visual breaking)
+   ========================= */
 .hero {
   height: 100vh;
   background: linear-gradient(to right, #ffffff, #f0f4ff);
@@ -59,18 +131,19 @@ header nav a:hover {
   justify-content: center;
   text-align: center;
   color: #1e3a8a;
-  padding-top: 80px;
+  padding-top: 92px; /* offset untuk header fixed */
   position: relative;
 }
-/* Hilangkan overlay abu-abu */
-.hero::after {
-  content: none;
-}
+/* remove overlay if present */
+.hero::after { content: none; }
+
 .hero-content {
   position: relative;
   z-index: 2;
   max-width: 800px;
-  padding: 0 20px;
+  text-align: center;
+  padding: 40px 18px;
+  
 }
 .hero h2 {
   font-size: 3rem;
@@ -96,60 +169,99 @@ header nav a:hover {
   text-decoration: none;
   transition: 0.3s;
 }
-.btn:hover {
-  background: #1e40af;
-  transform: scale(1.05);
-}
+.btn:hover { background: #1e40af; transform: scale(1.02); }
 
-/* SECTION TITLES */
+/* =========================
+   SECTION TITLES
+   ========================= */
 .section h2 {
   text-align: center;
   font-size: 2.5rem;
-  margin-bottom: 40px;
+  margin-bottom: 28px;
   color: #1e3a8a;
 }
 
-/* PRODUK UNGGULAN */
+/* special: geser sedikit Produk Unggulan ke bawah tanpa mengubah layout */
+.section.produk-unggulan h2,
+#produk + .container > h2,
+#produk h2 {
+  margin-top: 4px; /* kecil, hanya untuk posisi lebih "bawah" */
+}
+
+/* =========================
+   PRODUK UNGGULAN (cards)
+   ========================= */
+/* gunakan grid responsive agar lebih rapi */
 .cards {
-  display: flex;
+  display: grid;
   flex-wrap: wrap;
-  gap: 25px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 28px;
   justify-content: center;
+  justify-items: center;
+  align-items: start;
+  padding-bottom: 6px;
 }
 .card {
   background: linear-gradient(145deg, #ffffff, #e0e7ff);
-  padding: 25px;
+  width: 280px;     /* ukuran seragam */
+  height: 360px;       /* tinggi seragam biar semua sejajar */
   border-radius: 15px;
-  width: 280px;
-  text-align: center;
+  overflow: hidden;
+  text-align: left;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
   transition: 0.4s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 10px 25px rgba(83, 112, 241, 0.568);
 }
 .card:hover {
-  transform: translateY(-10px) scale(1.05);
+  transform: translateY(-10px);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
-.card .icon {
-  font-size: 3rem;
-  margin-bottom: 15px;
-  color: #2563eb;
-  transition: 0.4s;
+
+/* image (if inline style from template is used, this won't break) */
+.card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  display: block;
 }
-.card:hover .icon {
-  transform: rotate(15deg) scale(1.2);
+
+/* content area inside card */
+.card > div {
+  padding: 16px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+   min-height: 120px;
 }
 .card h3 {
-  margin-bottom: 10px;
-  font-size: 1.4rem;
+  margin: 8px 0 10px ;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
   color: #1e3a8a;
 }
 
-/* 🔥 Geser teks "Produk Unggulan" sedikit ke bawah */
-.section.produk-unggulan h2 {
-  margin-top: 35px; /* Tambahan baru untuk geser ke bawah */
+/* price text in card */
+.card p {
+  margin: 0;
+  color: #374151;
+  font-weight: 500;
 }
 
-/* ABOUT SECTION */
+/* subtle icon style (if used) */
+.card .icon {
+  font-size: 2.4rem;
+  margin-bottom: 8px;
+  color: #2563eb;
+}
+
+/* =========================
+   ABOUT SECTION
+   ========================= */
 .about-section {
   background: #f8faff;
   padding: 80px 0;
@@ -174,10 +286,10 @@ header nav a:hover {
   box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
 }
 
-/* CONTACT SECTION */
-.contact-section {
-  padding: 80px 0;
-}
+/* =========================
+   CONTACT SECTION
+   ========================= */
+.contact-section { padding: 80px 0; }
 .contact-form {
   display: flex;
   flex-direction: column;
@@ -207,12 +319,11 @@ header nav a:hover {
   cursor: pointer;
   transition: 0.3s;
 }
-.contact-form button:hover {
-  background: #1e40af;
-  transform: scale(1.05);
-}
+.contact-form button:hover { background: #1e40af; transform: scale(1.02); }
 
-/* FOOTER */
+/* =========================
+   FOOTER
+   ========================= */
 footer {
   background: #072b80;
   color: #fff;
@@ -222,10 +333,10 @@ footer {
   margin-top: 40px;
 }
 
-/* ALERT MESSAGES */
-.messages {
-  margin-top: 20px;
-}
+/* =========================
+   ALERT MESSAGES
+   ========================= */
+.messages { margin-top: 20px; }
 .alert {
   padding: 12px;
   border-radius: 8px;
@@ -235,61 +346,89 @@ footer {
   font-weight: 500;
   transition: all 0.3s ease;
 }
-.alert-success {
-  background: #ecfdf5;
-  color: #065f46;
-}
-.alert-error {
-  background: #fff1f2;
-  color: #9f1239;
-}
-.alert-info {
-  background: #f1f5f9;
-  color: #0f172a;
-}
-.alert:hover {
-  transform: scale(1.02);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-}
+.alert-success { background: #ecfdf5; color: #065f46; }
+.alert-error   { background: #fff1f2; color: #9f1239; }
+.alert-info    { background: #f1f5f9; color: #0f172a; }
+.alert:hover { transform: scale(1.02); box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
 
-/* ANIMATIONS */
-.opacity-zero {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.8s ease-out;
-}
-.fade-in {
-  opacity: 1;
-  transform: translateY(0);
-}
+/* =========================
+   ANIMATIONS
+   ========================= */
+.opacity-zero { opacity: 0; transform: translateY(20px); transition: all 0.8s ease-out; }
+.fade-in      { opacity: 1; transform: translateY(0); }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .hero h2 {
-    font-size: 2.2rem;
-  }
-  .hero p {
-    font-size: 1rem;
-  }
-  header .container {
+/* =========================
+   RESPONSIVE
+   ========================= */
+@media (max-width: 880px) {
+  /* make nav a collapsible dropdown */
+  .main-nav {
+    position: absolute;
+    top: 68px;
+    right: 16px;
+    background: rgba(255,255,255,0.98);
+    border-radius: 10px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.08);
     flex-direction: column;
+    gap: 0;
+    padding: 8px 6px;
+    display: none;
+    min-width: 170px;
   }
-  header nav a {
-    margin: 10px;
+  .main-nav a {
+    display: block;
+    padding: 10px 12px;
+    color: #1e408a;
   }
+  .main-nav.open { 
+    display: flex;
+    position: absolute;
+    top: 64px;
+    right: 20px;
+    background: rgba(255,255,255,0.98);
+    padding: 12px 16px;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    flex-direction: column;
+   }
+
+  .nav-toggle { display: inline-flex; align-items: center; }
+
+  .nav-toggle.open .hamburger { background: transparent; }
+  .nav-toggle.open .hamburger::before { transform: rotate(45deg) translate(5px, 5px); top: 0; }
+  .nav-toggle.open .hamburger::after  { transform: rotate(-45deg) translate(5px, -5px); top: 0; }
 }
 
-/* INPUT + NOTE */
-.input {
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
+/* small screens: hero & typography scale */
+@media (max-width: 768px) {
+  .hero h2 { font-size: 2.2rem; }
+  .hero p  { font-size: 1rem; }
+  header .container { flex-direction: row; }
+  header nav a { margin: 0; }
+  .card { max-width: 100%; }
 }
+
+/* =========================
+   FORM INPUT / NOTE
+   ========================= */
+.input { padding: 12px; border-radius: 8px; border: 1px solid #ddd; }
 .product-note {
   font-size: 0.95rem;
-  color: #eff3fc;
-  margin-top: 20px;
+  color: #374151;
+  margin-top: 12px;
   background: #f3f4f6;
   padding: 8px 12px;
   border-radius: 6px;
 }
+
+
+
+ .main-nav.open { display: flex; }
+
+  /* hamburger transform to X */
+  .nav-toggle.open .hamburger { background: transparent; }
+  .nav-toggle.open .hamburger::before { transform: rotate(45deg) translate(5px, 5px); }
+  .nav-toggle.open .hamburger::after  { transform: rotate(-45deg) translate(5px, -5px); }
+  .nav-toggle.open .hamburger::before,
+  .nav-toggle.open .hamburger::after { top: 0; }
+
