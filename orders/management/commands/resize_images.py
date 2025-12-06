@@ -23,7 +23,7 @@ class Command(BaseCommand):
                     continue
                 path = os.path.join(root, f)
                 try:
-                    img = Image.open(path)
+                    img = Image.open(path)     
                     w, h = img.size
                     if w > options['max_width']:
                         newh = int(h * options['max_width'] / w)

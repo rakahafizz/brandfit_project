@@ -46,7 +46,7 @@ def product_detail(request, slug):
             )
             wa_url = f"https://wa.me/{wa_number}?text={quote_plus(message)}"
 
-            messages.success(request, "Order tersimpan. Anda akan diarahkan ke WhatsApp untuk konfirmasi.")
+            messages.success(request, "Orderan anda sudah tersimpan😄. Anda akan diarahkan ke WhatsApp untuk konfirmasi.")
             return redirect(wa_url)
         else:
             messages.error(request, "Form tidak valid. Cek kembali isian.")
@@ -69,11 +69,7 @@ def product_detail_by_pk(request, pk):
 
 
 def order_create(request, slug):
-    """
-    Endpoint alternatif: /product/<slug>/order/
-    Perilaku: simpan order lalu redirect ke WA (sama seperti product_detail).
-    Jika kamu tidak butuh view terpisah, kamu bisa menghapusnya.
-    """
+
     product = get_object_or_404(Product, slug=slug)
 
     if request.method == 'POST':
